@@ -1,18 +1,26 @@
-# -*- coding: utf-8 -*-
+from odoo import models, fields, api
 
-# from odoo import models, fields, api
+class Ingrediente(models.Model):
+    _name = 'gtg.ingrediente'
+    _description = 'Modelo de Ingrediente'
 
+    name = fields.Char(string="Nombre", required=True)
+    precio = fields.Float(string="Precio", required=True)
+    tipo = fields.Selection([("proteina", "Proteína"), ("carbohidratos", "Carbohidratos"), ("grasas", "Grasas"), ("complemento", "Complemento")], 
+                            string="Tipo de Ingrediente", required=True)
+    
+    bowls_ids = fields.Many2many("gtg.bowl", string="Bowls")
 
-# class gtg(models.Model):
-#     _name = 'gtg.gtg'
-#     _description = 'gtg.gtg'
+class Bowl(models.Model):
+    _name = 'gtg.bowl'
+    _description = 'Modelo de Bowl'
+    
+    name = fields.Char(string="Nombre", required=True)
+    
+    ingredientes_ids = fields.Many2many("gtg.ingrediente", string="Ingredientes")
+    precio_total = fields.Float(string="Precio Total", compute='_compute_precio_total', store=True)
 
-#     name = fields.Char()
-#     value = fields.Integer()
-#     value2 = fields.Float(compute="_value_pc", store=True)
-#     description = fields.Text()
-#
-#     @api.depends('value')
-#     def _value_pc(self):
-#         for record in self:
-#             record.value2 = float(record.value) / 100
+    @api.depends('ingredientes_ids.precio')
+    def _compute_precio_total(self):
+        for bowl in self:
+            bowl.precio_total = sum(bowl.ingredientes_ids.mapped('precio'))

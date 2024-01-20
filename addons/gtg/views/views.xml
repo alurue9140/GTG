@@ -1,60 +1,109 @@
 <odoo>
   <data>
-    <!-- explicit list view definition -->
-<!--
-    <record model="ir.ui.view" id="gtg.list">
-      <field name="name">GTG list</field>
-      <field name="model">gtg.gtg</field>
+
+    <!-- MENU GTG ROOT -->
+    <menuitem name="GTG" id="gtg.menu_root" />
+
+    <!-- VISTAS INGREDIENTE -->
+    
+    <record id="gtg.ingrediente_form" model="ir.ui.view">
+      <field name="name">gtg.ingrediente.form</field>
+      <field name="model">gtg.ingrediente</field>
       <field name="arch" type="xml">
-        <tree>
-          <field name="name"/>
-          <field name="value"/>
-          <field name="value2"/>
-        </tree>
+        <form>
+          <group>
+            <field name="name"/>
+            <field name="precio"/>
+            <field name="tipo"/>
+          </group>
+        </form>
       </field>
     </record>
--->
 
-    <!-- actions opening views on models -->
-<!--
-    <record model="ir.actions.act_window" id="gtg.action_window">
-      <field name="name">GTG window</field>
-      <field name="res_model">gtg.gtg</field>
-      <field name="view_mode">tree,form</field>
-    </record>
--->
-
-    <!-- server action to the one above -->
-<!--
-    <record model="ir.actions.server" id="gtg.action_server">
-      <field name="name">GTG server</field>
-      <field name="model_id" ref="model_gtg_gtg"/>
-      <field name="state">code</field>
-      <field name="code">
-        action = {
-          "type": "ir.actions.act_window",
-          "view_mode": "tree,form",
-          "res_model": model._name,
-        }
+    <record id="gtg.ingrediente_kanban" model="ir.ui.view">
+      <field name="name">gtg.ingrediente.kanban</field>
+      <field name="model">gtg.ingrediente</field>
+      <field name="arch" type="xml">
+        <kanban>
+          <templates>
+            <t t-name="kanban-box">
+              <div class="oe_kanban_content">
+                <div class="oe_kanban_global_click">
+                  <strong>
+                    <field name="name"/>
+                  </strong>
+                  <div>
+                    <field name="precio" widget="monetary" options="{'currency_field': 'currency_id', 'no_symbol': False}"/> <t>&#x20AC;</t>
+                  </div>
+                  <div>
+                    <field name="tipo"/>
+                  </div>
+                </div>
+              </div>
+            </t>
+          </templates>
+        </kanban>
       </field>
     </record>
--->
 
-    <!-- Top menu item -->
-<!--
-    <menuitem name="GTG" id="gtg.menu_root"/>
--->
-    <!-- menu categories -->
-<!--
-    <menuitem name="Menu 1" id="gtg.menu_1" parent="gtg.menu_root"/>
-    <menuitem name="Menu 2" id="gtg.menu_2" parent="gtg.menu_root"/>
--->
-    <!-- actions -->
-<!--
-    <menuitem name="List" id="gtg.menu_1_list" parent="gtg.menu_1"
-              action="gtg.action_window"/>
-    <menuitem name="Server to list" id="gtg" parent="gtg.menu_2"
-              action="gtg.action_server"/>
--->
+    <record id="gtg.ingrediente_action_window" model="ir.actions.act_window">
+      <field name="name">Ingrediente</field>
+      <field name="res_model">gtg.ingrediente</field>
+      <field name="view_mode">form,kanban</field>
+      <field name="view_id" ref="gtg.ingrediente_kanban"/>
+    </record>
+
+    <menuitem name="Ingrediente" id="gtg.ingrediente_menu" parent="gtg.menu_root" action="gtg.ingrediente_action_window" />
+
+
+
+    <!-- VISTAS BOWLS -->
+
+    <record id="gtg.bowl_form" model="ir.ui.view">
+      <field name="name">gtg.bowl.form</field>
+      <field name="model">gtg.bowl</field>
+      <field name="arch" type="xml">
+        <form>
+          <group>
+            <field name="name"/>
+            <field name="ingredientes_ids" widget="many2many_tags"/>
+            <field name="precio_total" readonly="1"/>
+          </group>
+        </form>
+      </field>
+    </record>
+
+    <record id="gtg.bowl_kanban" model="ir.ui.view">
+      <field name="name">gtg.bowl.kanban</field>
+      <field name="model">gtg.bowl</field>
+      <field name="arch" type="xml">
+        <kanban>
+          <templates>
+            <t t-name="kanban-box">
+              <div class="oe_kanban_content">
+                <div class="oe_kanban_global_click">
+                  <strong>
+                    <field name="name"/>
+                  </strong>
+                  <div>
+                    <field name="precio_total" widget="monetary" options="{'currency_field': 'currency_id', 'no_symbol': False}" readonly="1"/> <t>&#x20AC;</t>
+                  </div>
+                </div>
+              </div>
+            </t>
+          </templates>
+        </kanban>
+      </field>
+    </record>    
+
+    <record id="gtg.bowl_action_window" model="ir.actions.act_window">
+      <field name="name">Bowl</field>
+      <field name="res_model">gtg.bowl</field>
+      <field name="view_mode">form,kanban</field>
+      <field name="view_id" ref="gtg.bowl_kanban"/>
+    </record>
+
+    <menuitem name="Bowl" id="gtg.bowl_menu" parent="gtg.menu_root" action="gtg.bowl_action_window" />
+
   </data>
 </odoo>
