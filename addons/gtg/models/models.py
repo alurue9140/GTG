@@ -24,3 +24,17 @@ class Bowl(models.Model):
     def _compute_precio_total(self):
         for bowl in self:
             bowl.precio_total = sum(bowl.ingredientes_ids.mapped('precio'))
+
+class Client(models.Model):
+    _name = 'gtg.client'
+    _description = 'Modelo de Cliente'
+
+    dni = fields.Char(string="Número de identificación", required=True)
+    name = fields.Char(string="Nombre", required=True)
+    surnames = fields.Char(string="Apellidos")
+    email = fields.Char(string="Correo eléctronico")
+    address = fields.Char(string="Dirección del cliente", required=True)
+    phone = fields.Char(string="Número de teléfono", required=True)
+    city = fields.Char(string="Ciudad", required=True)
+    country = fields.Char(string="País", required=True)
+    information = fields.Text(string="Información extra acerca del usuario")

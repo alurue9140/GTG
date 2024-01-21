@@ -105,5 +105,82 @@
 
     <menuitem name="Bowl" id="gtg.bowl_menu" parent="gtg.menu_root" action="gtg.bowl_action_window" />
 
+    <!-- VISTAS CLIENTE -->
+
+    <record model="ir.ui.view" id="gtg.client_tree">
+      <field name="name">gtg.client.tree</field>
+      <field name="model">gtg.client</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="dni"/>
+          <field name="name"/>
+          <field name="surnames"/>
+          <field name="phone"/>
+          <field name="email"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="gtg.client_form">
+      <field name="name">gtg.client.form</field>
+      <field name="model">gtg.client</field>
+      <field name="arch" type="xml">
+        <form>
+          <group colspan="2" col="2">
+            <field name="dni"/>
+            <field name="name"/>
+            <field name="surnames"/>
+            <field name="phone"/>
+            <field name="email"/>
+            <field name="address"/>
+            <field name="city"/>
+            <field name="country"/>
+            <field name="information"/>
+          </group>
+        </form>
+      </field>
+    </record>
+
+    <record id="gtg.client_kanban" model="ir.ui.view">
+      <field name="name">gtg.client.kanban</field>
+      <field name="model">gtg.client</field>
+      <field name="arch" type="xml">
+        <kanban>
+          <templates>
+            <t t-name="kanban-box">
+              <div class="oe_kanban_content">
+                <div class="oe_kanban_global_click">
+                  <strong>
+                    <field name="dni"/>
+                  </strong>
+                  <div>
+                  <field name="name"/>
+                  </div>
+                  <div>
+                  <field name="phone"/>
+                  </div>
+                  <div>
+                  <field name="city"/>
+                  </div>
+                  <div>
+                  <field name="country"/>
+                  </div>
+                </div>
+              </div>
+            </t>
+          </templates>
+        </kanban>
+      </field>
+    </record>   
+
+    <record id="gtg.client_action_window" model="ir.actions.act_window">
+      <field name="name">Client</field>
+      <field name="res_model">gtg.client</field>
+      <field name="view_mode">form,tree,kanban</field>
+      <field name="view_id" ref="gtg.client_tree"/>
+    </record>
+
+    <menuitem name="Client" id="gtg.client_menu" parent="gtg.menu_root" action="gtg.client_action_window" />
+
   </data>
 </odoo>
