@@ -10,6 +10,7 @@ class Ingrediente(models.Model):
                             string="Tipo de Ingrediente", required=True)
     
     bowls_ids = fields.Many2many("gtg.bowl", string="Bowls")
+    menus_ids = fields.Many2many("gtg.menu", string="Menús")
 
 class Bowl(models.Model):
     _name = 'gtg.bowl'
@@ -24,6 +25,23 @@ class Bowl(models.Model):
     def _compute_precio_total(self):
         for bowl in self:
             bowl.precio_total = sum(bowl.ingredientes_ids.mapped('precio'))
+
+class Menu(models.Model):
+    _name = 'gtg.menu'
+    _description = 'Modelo de Menú'
+    
+    name = fields.Char(string="Nombre", required=True)
+    entrante = fields.Char(string="Entrante", required=True)
+    principal = fields.Char(string="Plato Principal", required=True)
+    postre = fields.Char(string="Postre", required=True)
+    
+    ingredientes_ids = fields.Many2many("gtg.ingrediente", string="Ingredientes")
+    precio_total = fields.Float(string="Precio Total", compute='_compute_precio_total', store=True)
+
+    @api.depends('ingredientes_ids.precio')
+    def _compute_precio_total(self):
+        for menu in self:
+            menu.precio_total = sum(menu.ingredientes_ids.mapped('precio'))
 
 class Client(models.Model):
     _name = 'gtg.client'
